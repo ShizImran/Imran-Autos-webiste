@@ -14,15 +14,20 @@ from starlette.staticfiles import StaticFiles
 
 app = FastAPI()
 
-# Get the absolute path of the static directory
-static_dir = os.path.join(os.path.dirname(_file_), "static")
+# Get absolute path of the static directory
+BASE_DIR = os.path.dirname(os.path.abspath(_file_))
+STATIC_DIR = os.path.join(BASE_DIR, "static")
 
-# Create static folder if missing
-if not os.path.exists(static_dir):
-    os.makedirs(static_dir)
+# Debug: Print the absolute path
+print(f"Static Directory Path: {STATIC_DIR}")
 
-app.mount("/static", StaticFiles(directory=static_dir), name="static")
+# Ensure the static directory exists
+if not os.path.exists(STATIC_DIR):
+    print("Static directory is missing. Creating it now...")
+    os.makedirs(STATIC_DIR)
 
+# Mount the static folder
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 #Till here 
 
 # MongoDB client setup
